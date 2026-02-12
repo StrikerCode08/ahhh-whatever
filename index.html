@@ -5,6 +5,24 @@
     <link rel="icon" type="image/svg+xml" href="/vite.svg" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>valentine-app</title>
+    <script>
+      (function () {
+        // Convert GitHub Pages 404 redirect query back into a client route.
+        const url = new URL(window.location.href);
+        let path = url.searchParams.get("p");
+        if (!path) return;
+
+        // Recover gracefully from previously looped values like "/?p=%2F..."
+        for (let i = 0; i < 8 && path.startsWith("/?p="); i += 1) {
+          path = decodeURIComponent(path.slice(4));
+        }
+
+        path = decodeURIComponent(path).replace(/~and~/g, "&");
+        const cleanBase = url.pathname.replace(/\/+$/, "");
+        const cleanPath = path.startsWith("/") ? path : "/" + path;
+        window.history.replaceState(null, "", cleanBase + cleanPath);
+      })();
+    </script>
   </head>
   <body>
     <div id="root"></div>
